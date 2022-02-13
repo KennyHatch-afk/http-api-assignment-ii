@@ -20,12 +20,6 @@ const urlStruct = {
     },
 };
 
-const handlePost = (request, response, parsedUrl) => {
-    if(parsedUrl.pathname === '/addUser') {
-      parseBody(request, response, jsonHandler.addUser);
-    }
-};
-
 const parseBody = (request, response, handler) => {
     const body = [];
   
@@ -45,6 +39,12 @@ const parseBody = (request, response, handler) => {
   
       handler(request, response, bodyParams);
     });
+};
+
+const handlePost = (request, response, parsedUrl) => {
+    if(parsedUrl.pathname === '/addUser') {
+      parseBody(request, response, jsonHandler.addUser);
+    }
 };
 
 const onRequest = (request, response) => {

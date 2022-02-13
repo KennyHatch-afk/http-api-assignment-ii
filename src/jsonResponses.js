@@ -1,5 +1,22 @@
 const users = {};
 
+const respondJSON = (request, response, status, object) => {
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    
+    response.writeHead(status, headers);
+    response.write(JSON.stringify(object));
+    response.end();
+};
+
+const respondJSONMeta = (request, response, status) => {
+    const headers = {};
+
+    response.writeHead(status, headers);
+    response.end();
+};
+
 const addUser = (request, response, body) => {
     const responseJSON = {
       message: 'Name and age are both required.',
@@ -27,24 +44,6 @@ const addUser = (request, response, body) => {
 
     return respondJSONMeta(request, response, responseCode);
 };
-  
-
-const respondJSON = (request, response, status, object) => {
-    const headers = {
-      'Content-Type': 'application/json',
-    };
-    
-    response.writeHead(status, headers);
-    response.write(JSON.stringify(object));
-    response.end();
-};
-
-const respondJSONMeta = (request, response, status) => {
-    const headers = {};
-
-    response.writeHead(status, headers);
-    response.end();
-};
 
 const getUsers = (request, response) => {
     const responseJSON = {
@@ -59,10 +58,6 @@ const getUsersMeta = (request, response) => {
 };
   
 const notReal = (request, response) => {
-    const headers = {
-        'Content-Type': 'application/json',
-    };
-
     const responseJSON = {
       message: 'The page you are looking for was not found.',
       id: 'notFound',
