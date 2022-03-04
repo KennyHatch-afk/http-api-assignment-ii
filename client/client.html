@@ -1,23 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Our simple HTTP server</title>
+  <title>Pokemon Offensive Coverage Checker</title>
+  <!--Get style sheet-->
   <link rel="stylesheet" type="text/css" href="/style.css">
   
   <script>
+    let obj;
+
+    //Once a response is given
     const handleResponse = async (response, parseResponse) => {
 
       const content = document.querySelector('#content');
+      const moveList = document.querySelector('#newMoves');
+      const moves = document.querySelector('#moves');
 
+      //Output status code
       switch(response.status) {
         case 200: 
           content.innerHTML = `<b>Success</b>`;
           break;
         case 201:
-          content.innerHTML = `<b>Created</b>`;
+          content.innerHTML = `<b>Created Type List</b>`;
           break;
         case 204: 
-          content.innerHTML = `<b>Updated (No Content)</b>`;
+          content.innerHTML = `<b>Updated Type List</b>`;
           break;
         case 400:
           content.innerHTML = `<b>Bad Request</b>`;
@@ -27,31 +34,156 @@
           break;
       }
 
-      if(response.headers.get('content-type') === 'application/json'){
-        let obj = await response.json();
+      if(response.status === 201 || response.status === 204)
+      //If Add Type was a success
+      {
+        switch(moves.value)
+        //Then reveal the hidden image to the related type
+        {
+          case "normal":
+            document.getElementById("normal").style.visibility = 'visible';
+            break;
+          case "fighting":
+            document.getElementById("fighting").style.visibility = 'visible';
+            break;
+          case "flying":
+            document.getElementById("flying").style.visibility = 'visible';
+            break;
+          case "poison":
+            document.getElementById("poison").style.visibility = 'visible';
+            break;
+          case "ground":
+            document.getElementById("ground").style.visibility = 'visible';
+            break;
+          case "rock":
+            document.getElementById("rock").style.visibility = 'visible';
+            break;
+          case "bug":
+            document.getElementById("bug").style.visibility = 'visible';
+            break;
+          case "ghost":
+            document.getElementById("ghost").style.visibility = 'visible';
+            break;
+          case "steel":
+            document.getElementById("steel").style.visibility = 'visible';
+            break;
+          case "fire":
+            document.getElementById("fire").style.visibility = 'visible';
+            break;
+          case "water":
+            document.getElementById("water").style.visibility = 'visible';
+            break;
+          case "grass":
+            document.getElementById("grass").style.visibility = 'visible';
+            break;
+          case "electric":
+            document.getElementById("electric").style.visibility = 'visible';
+            break;
+          case "psychic":
+            document.getElementById("psychic").style.visibility = 'visible';
+            break;
+          case "ice":
+            document.getElementById("ice").style.visibility = 'visible';
+            break;
+          case "dragon":
+            document.getElementById("dragon").style.visibility = 'visible';
+            break;
+          case "dark":
+            document.getElementById("dark").style.visibility = 'visible';
+            break;
+          case "fairy":
+            document.getElementById("fairy").style.visibility = 'visible';
+            break;
+        }
+      }
 
-        console.log(obj);
-        
-        if(obj.message) {
+      //If the response has JSON, then parse it
+      if(response.headers.get('content-type') === 'application/json'){
+        obj = await response.json();
+
+        if(obj.hasOwnProperty("message")) {
+          //If the rseponse has a message then show it
           content.innerHTML += `<p>Message: ${obj.message}</p>`
         } else if (parseResponse) {
-          let jsonString = JSON.stringify(obj.users);
-          content.innerHTML += `<p>${jsonString}</p>`;
+          //Otherwise if the response is from the Check Coverage button then reveal the type images of the types in the given JSON
+          document.getElementById("types").style.visibility = 'hidden';
+
+          Object.keys(obj).forEach(function(element){
+            console.log(element);
+            switch(element){
+              case "normal":
+              document.getElementById("normalT").style.visibility = 'visible';
+              break;
+            case "fighting":
+              document.getElementById("fightingT").style.visibility = 'visible';
+              break;
+            case "flying":
+              document.getElementById("flyingT").style.visibility = 'visible';
+              break;
+            case "poison":
+              document.getElementById("poisonT").style.visibility = 'visible';
+              break;
+            case "ground":
+              document.getElementById("groundT").style.visibility = 'visible';
+              break;
+            case "rock":
+              document.getElementById("rockT").style.visibility = 'visible';
+              break;
+            case "bug":
+              document.getElementById("bugT").style.visibility = 'visible';
+              break;
+            case "ghost":
+              document.getElementById("ghostT").style.visibility = 'visible';
+              break;
+            case "steel":
+              document.getElementById("steelT").style.visibility = 'visible';
+              break;
+            case "fire":
+              document.getElementById("fireT").style.visibility = 'visible';
+              break;
+            case "water":
+              document.getElementById("waterT").style.visibility = 'visible';
+              break;
+            case "grass":
+              document.getElementById("grassT").style.visibility = 'visible';
+              break;
+            case "electric":
+              document.getElementById("electricT").style.visibility = 'visible';
+              break;
+            case "psychic":
+              document.getElementById("psychicT").style.visibility = 'visible';
+              break;
+            case "ice":
+              document.getElementById("iceT").style.visibility = 'visible';
+              break;
+            case "dragon":
+              document.getElementById("dragonT").style.visibility = 'visible';
+              break;
+            case "dark":
+              document.getElementById("darkT").style.visibility = 'visible';
+              break;
+            case "fairy":
+              document.getElementById("fairyT").style.visibility = 'visible';
+              break;
+            }
+          });
         }
       }
     };
 
-    const sendPost = async (nameForm) => {
-      const nameAction = nameForm.getAttribute('action');
-      const nameMethod = nameForm.getAttribute('method');
+    //If Add Type button was pressed
+    const sendPost = async (moveAdd) => {
       
-      const nameField = nameForm.querySelector('#nameField');
-      const ageField = nameForm.querySelector('#ageField');
+      const moves = moveAdd.querySelector('#moves').value;
+      const moveAction = moveAdd.getAttribute('action');
+      const moveMethod = moveAdd.getAttribute('method');
 
-      const formData = `name=${nameField.value}&age=${ageField.value}`;
+      //fill out body with given type
+      const formData = `type=${moves}`;
 
-      let response = await fetch(nameAction, {
-        method: nameMethod,
+      //fetch with given body
+      let response = await fetch(moveAction, {
+        method: moveMethod,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Accept': 'application/json',
@@ -62,65 +194,134 @@
       handleResponse(response);
     };
 
-    const requestUpdate = async (userForm) => {
-      
-      const url = userForm.querySelector('#urlField').value;
-      const method = userForm.querySelector('#methodSelect').value;
-      
-      let response = await fetch(url, {
-        method,
-        headers: {
-          'Accept': 'application/json'
-        },
-      });
+    const requestUpdate = async () => {
 
-      handleResponse(response, method === 'get');
+      let response;
+
+      //If Check Coverage button was pressed fetch
+      if(document.querySelector("#fairyCheck").checked)
+      {
+        //If fairy ignore checkbox was checked, then fetch with parameters
+        response = await fetch('/checkCoverage?fairyCheck=true', {
+        method: "get",
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept': 'application/json',
+        }});
+      }
+      else {
+        //Otherwise fetch normally
+        response = await fetch('/checkCoverage', {
+          method: "get",
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Accept': 'application/json',
+          },
+        });
+      };        
+
+      handleResponse(response, true);
     };
 
     const init = () => {
-      const userForm = document.querySelector('#userForm');
-      const nameForm = document.querySelector('#nameForm');
+      const moveAdd = document.querySelector('#moveAdd');
+      const moveList = document.querySelector('#moveList');
       
-      const getUsers = (e) => {
+      //Add event to Add Type button
+      const addType = (e) => {
         e.preventDefault();
-        requestUpdate(userForm);
+        sendPost(moveAdd);
         return false;
       }
-      
-      const addUser = (e) => {
-        e.preventDefault();
-        sendPost(nameForm);
-        return false;
-      }
+      moveAdd.addEventListener('submit', addType);
 
-      nameForm.addEventListener('submit', addUser);
-      userForm.addEventListener('submit', getUsers);
+      //Add event to Check Coverage button
+      const checkCoverage = (e) => {
+        e.preventDefault();
+        requestUpdate(moveList);
+        return false;
+      }
+      moveList.addEventListener('submit', checkCoverage);
     };
 
     window.onload = init;
   </script>
 </head>
+
 <body>
   <section id="top">
-    <h3>POST Status Code Tests</h3>
-    <form id="nameForm" action="/addUser" method="post">
-      <label for="name">Name: </label>
-      <input id="nameField" type="text" name="name" />
-      <label for="age">Age: </label>
-      <input id="ageField" type="number" name="age" min="0" max="100" step="1"/>
-      <input type="submit" value="Add User" />
-    </form>
-    <form id="userForm" action="/getUsers" method="get">
-      <select id='urlField'>
-        <option value='/getUsers'>/getUsers</option>
-        <option value='/notReal'>/notReal</option>
+    <h3>Pokemon Coverage Checker</h3>
+    <form id="moveAdd" action="/addType" method="POST">
+      <select id='moves'>
+        <option value='normal'>Normal</option>
+        <option value='fighting'>Fighting</option>
+        <option value='flying'>Flying</option>
+        <option value='poison'>Poison</option>
+        <option value='ground'>Ground</option>
+        <option value='rock'>Rock</option>
+        <option value='bug'>Bug</option>
+        <option value='ghost'>Ghost</option>
+        <option value='steel'>Steel</option>
+        <option value='fire'>Fire</option>
+        <option value='water'>Water</option>
+        <option value='grass'>Grass</option>
+        <option value='electric'>Electric</option>
+        <option value='psychic'>Psychic</option>
+        <option value='ice'>Ice</option>
+        <option value='dragon'>Dragon</option>
+        <option value='dark'>Dark</option>
+        <option value='fairy'>Fairy</option>
       </select>
-      <select id="methodSelect">
-        <option value="get">GET</option>
-        <option value="head">HEAD</option>
-      </select>
-      <input type="submit" value="Get User" />
+      <input id="submit" type="submit" value="Add Type"/>
     </form>
+    <form id="moveList" action="/checkCoverage">
+      <p id="newMoves">
+        <img id='normal' src="normalT" alt="Normal">
+        <img id='fighting'src="fightingT" alt="Fighting">
+        <img id='flying' src="flyingT" alt="Flying">
+        <img id='poison' src="poisonT" alt="Poison">
+        <img id='ground' src="groundT" alt="Ground">
+        <img id='rock' src="rockT" alt="Rock">
+        <img id='bug' src="bugT" alt="Bug">
+        <img id='ghost' src="ghostT" alt="Ghost">
+        <img id='steel' src="steelT" alt="Steel">
+        <img id='fire' src="fireT" alt="Fire">
+        <img id='water' src="waterT" alt="Water">
+        <img id='grass' src="grassT" alt="Grass">
+        <img id='electric' src="electricT" alt="Electric">
+        <img id='psychic' src="psychicT" alt="Psychic">
+        <img id='ice' src="iceT" alt="Ice">
+        <img id='dragon' src="dragonT" alt="Dragon">
+        <img id='dark' src="darkT" alt="Dark">
+        <img id='fairy' src="fairyT" alt="Fairy">
+      </p>
+      <input type="checkbox" id="fairyCheck" value="fairy">
+      <label for="fairyCheck">Exclude</label>
+      <img src="fairyT" alt="Fairy">
+      <label for="fairyCheck">Type</label>
+      <br>
+      <input id="submit" type="submit" value="Check Coverage"/>
+    </form>
+  </section>
+  <section id="types">
+    <img id='normalT' src="normalT" alt="Normal">
+    <img id='fightingT' src="fightingT" alt="Fighting">
+    <img id='flyingT' src="flyingT" alt="Flying">
+    <img id='poisonT' src="poisonT" alt="Poison">
+    <img id='groundT' src="groundT" alt="Ground">
+    <img id='rockT' src="rockT" alt="Rock">
+    <img id='bugT' src="bugT" alt="Bug">
+    <img id='ghostT' src="ghostT" alt="Ghost">
+    <img id='steelT' src="steelT" alt="Steel">
+    <img id='fireT' src="fireT" alt="Fire">
+    <img id='waterT' src="waterT" alt="Water">
+    <img id='grassT' src="grassT" alt="Grass">
+    <img id='electricT' src="electricT" alt="Electric">
+    <img id='psychicT' src="psychicT" alt="Psychic">
+    <img id='iceT' src="iceT" alt="Ice">
+    <img id='dragonT' src="dragonT" alt="Dragon">
+    <img id='darkT' src="darkT" alt="Dark">
+    <img id='fairyT' src="fairyT" alt="Fairy">
   </section>
   <section id="content">
   </section>

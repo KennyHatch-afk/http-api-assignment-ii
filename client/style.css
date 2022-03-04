@@ -1,8 +1,17 @@
-html, body {
+html {
+  background-image: url(/background);
   height: 100%;
   width: 100%;
   margin: 0;
   padding: 0;
+}
+
+body {
+  max-width: 50%;
+  margin: auto;
+  height: 90%;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 #top {
@@ -10,12 +19,37 @@ html, body {
   margin: 0 auto;
 }
 
-#top h1 {
+#top h3 {
   font-size: 2em;
 }
 
 #content {
-  margin-top: 100px;
+  margin-top: 5vh;
   font-size: 2em;
   text-align: center;
+}
+
+#newMoves {
+  visibility: hidden;
+}
+
+#types{
+  text-align: center;
+  margin: 0 auto;
+  visibility: hidden;
+}
+
+#submit{
+  margin-top: 0.5em;
+  margin-bottom: 0.7em;
+  border-width: 0.3em;
+  border-color: darkgray;
+  border-radius: 5%;
+  background-color: #79c9f9;
+}
+
+#moves {
+  border-width: 0.3em;
+  border-color: darkgray;
+  background-color: #79c9f9;
 }
